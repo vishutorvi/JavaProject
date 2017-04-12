@@ -1,3 +1,4 @@
+Automatic Conversion of JSON to Relational Database Schema
 Here is a project which converts Huge JSON objects which has redundant data, which we are converting into Relational Schema Database helpful
 in Both Data Analytics and removing of data redundancy.
 
@@ -23,4 +24,10 @@ under /src/com/uttara/info folder. Change line No 46, source from 'src/pullreque
 
 Done!!
 
-You can see new tables created in MYSQL database
+You can see new tables created in MYSQL database with primary foreign constraints attached.
+
+To obtain Schema for this database, We need to do reverse engineering
+    1) Go to MySQL WORKBENCH
+    2) Select Database from menu bar.
+    3) Click on Reverse Engineer
+    4) Select the Database for which Schema needs to be generated. In my case it is (sampletable_demo).
