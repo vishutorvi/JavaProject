@@ -1,6 +1,6 @@
-Automatic Conversion of JSON to Relational Database Schema
-Here is a project which converts Huge JSON objects which has redundant data, which we are converting into Relational Schema Database helpful
-in Both Data Analytics and removing of data redundancy.
+                        Automatic Conversion of JSON to Relational Database Schema
+
+Here is a project which converts Huge JSON objects which has redundant data, which we are converting into Relational Schema Database helpful in Both Data Analytics and removing of data redundancy.
 
 This is the implementation for the Paper "Automatic Generation of Normalized Relational Schemas from Nested Key-Value Data", Authors are 	
 Michael DiScala	Yale University, New Haven, CT, USA, Daniel J. Abadi	Yale University, New Haven, CT, USA.
