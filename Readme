@@ -10,14 +10,13 @@ To install and run this Project following steps should be followed:
 1) We need Database, We used MySQL database, so we recommend to install MySQL database.
   To install mySQL database please follow the link: https://www.sitepoint.com/how-to-install-mysql/ under Manual Installation section.
 2) Create schema by name sampletable_demo in MySQL database.
-3) If your listening port is other than 3306, Go to the file DatabaseConnections.java under 'src/com/uttara/connection'. change line 20 by
-"jdbc:mysql://localhost:<YOUR_PORT_NUMBER>/sampletable_demo";
+3) If your listening port is other than 3306, Go to the file DatabaseConnections.java under the folder 'src/com/uttara/connection'. change line 20 to "jdbc:mysql://localhost:<YOUR_PORT_NUMBER>/sampletable_demo";
 
 3) Download the complete package/you can directly use the Zip file, we have sample JSON file within the folder /src, this is a sample of 100 JSON Objects which is enough to test this project If complete dataset is required please follow the link:
 https://drive.google.com/file/d/0B3Mo6HBxuETXY2phSkdaeFJhZVU/view?usp=sharing
 
 4) To use the above complete dataset, Please place this file under /src. Once it is placed, change the file by name JsonMainConverter.java 
-under /src/com/uttara/info folder. Change line No 46, source from 'src/pullrequest_json_1.json' to 'src/pullrequestsdb.pull_requests.json'
+under '/src/com/uttara/info' folder. Change line No 46, source from 'src/pullrequest_json_1.json' to 'src/pullrequestsdb.pull_requests.json'
 
 5) We can use either Eclipse or Netbeans IDE to load this workspace folders and go to file JsonMainConverter.java, right click and run as Java Application.
 
