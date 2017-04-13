@@ -18,8 +18,7 @@ https://drive.google.com/file/d/0B3Mo6HBxuETXY2phSkdaeFJhZVU/view?usp=sharing
 4) To use the above complete dataset, Please place this file under /src. Once it is placed, change the file by name JsonMainConverter.java 
 under '/src/com/uttara/info' folder. Change line No 46, source from 'src/pullrequest_json_1.json' to 'src/pullrequestsdb.pull_requests.json'
 
-5) We can use either Eclipse or Netbeans IDE to load this workspace folders, add all the extra jars provided (gson-2.7.jar,jackson-mapper-asl-1.2.0.jar,json-simple.jar,mysqlconnector-java.jar).
-Once jars are added go to file JsonMainConverter.java, right click and run as Java Application.
+5) We can use either Eclipse or Netbeans IDE to load this workspace folders, and go to the file JsonMainConverter.java, right click and run as Java Application.
 
 Done!!
 
