@@ -6,7 +6,11 @@ import java.util.Map;
 import com.uttara.connection.DatabaseConnections;
 
 public class PhaseThreeCode {
-	
+	/**
+	 * This is the main method for creating and inserting each specific tables
+	 * from the input Map objects.
+	 * @param finalObjectStructure
+	 */
 	public void creatingAndInsertingTables(Map<String,ArrayList<String>> finalObjectStructure){
 		//First for User Objects inserting
 		creatingAndInsertingUserTable(finalObjectStructure);
@@ -22,7 +26,7 @@ public class PhaseThreeCode {
 		creatingAndInsertingPullRequestTable(finalObjectStructure);
 	}
 	/**
-	 * Method to create and insert Pull request object into the database
+	 * This method is used to create and insert Pull request object into the database
 	 * @param finalObjectStructure
 	 */
 	public void creatingAndInsertingPullRequestTable(
@@ -50,7 +54,7 @@ public class PhaseThreeCode {
 		}
 	}
 	/**
-	 * Method to create and insert link objects in the database
+	 * This method to create and insert link objects in the database
 	 * @param finalObjectStructure
 	 */
 	public void creatingAndInsertingLinkTable(
@@ -65,7 +69,7 @@ public class PhaseThreeCode {
 		}
 	}
 	/**
-	 * Method to create and insert label table
+	 * This method to create and insert label table
 	 */
 	public void creatingAndInsertingLabelTable(Map<String,ArrayList<String>> finalObjectStructure){
 		String creatingLabelTable = "CREATE TABLE LABEL(";
@@ -80,7 +84,7 @@ public class PhaseThreeCode {
 		}
 	}
 	/**
-	 * Method to create and insert milestone table
+	 * This method to create and insert milestone table
 	 */
 	public void creatingAndInsertingMilestoneTable(Map<String,ArrayList<String>> finalObjectStructure){
 		String creatingMileStoneTable = "CREATE TABLE MILESTONE(";
@@ -97,7 +101,7 @@ public class PhaseThreeCode {
 		}
 	}
 	/**
-	 * Method to create Head Table and insert Head and Base details
+	 * This method to create Head Table and insert Head and Base details
 	 */
 	public void creatingAndInsertingHeadTable(Map<String,ArrayList<String>> finalObjectStructure){
 		String creatingHeadBaseTable = "CREATE TABLE HEAD_BASE_REPO(";
@@ -140,7 +144,9 @@ public class PhaseThreeCode {
 		}
 	}
 	/**
-	 * Method to create User Table and insert user details into it
+	 * This method is used to create User Table and insert user details into it from the flat table
+	 * with adhering to constraints.
+	 * @param finalObjectStructure
 	 */
 	public void creatingAndInsertingUserTable(Map<String,ArrayList<String>> finalObjectStructure){
 		String creatingUserTable = "CREATE TABLE USERS(login TEXT,id BIGINT,avatar_url TEXT,gravatar_id BIGINT,url TEXT,html_url TEXT,followers_url TEXT,following_url TEXT," +

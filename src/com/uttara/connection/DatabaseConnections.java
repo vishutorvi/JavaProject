@@ -28,9 +28,9 @@ public class DatabaseConnections {
 	// total row count
 	private static double countRow = countOfRows();
    /**
-    * Method to create table
+    * This Method is used to create flat table
     * @param stringToCreateTable
-    * @return
+    * @return boolean flag whether table were created or not
     */
    public static boolean createTable(String stringToCreateTable){
 	   Statement stmt = null;
@@ -54,6 +54,7 @@ public class DatabaseConnections {
 	   System.out.println("Creating flat table in given database...");
 	   try {
 		stmt = conn.createStatement();
+		//Check whether table were already created or not
 		String userExists = "show tables like \"FLAT_TABLE\"";
 		ResultSet rs = stmt.executeQuery(userExists);
 		if(!rs.next()){
@@ -77,9 +78,10 @@ public class DatabaseConnections {
 	   return false;
    }
    /**
-    * Method to insert into the table
+    * This Method is used to insert data into the flat table
+    * Insertion happens under transaction
     * @param stringToInsertTable
-    * @return
+    * @return flag whether insertion happened or not
     */
    public static boolean insertIntoTable(String stringToInsertTable){
 	   boolean inserted = true; 
@@ -102,7 +104,7 @@ public class DatabaseConnections {
 	   }
 	   System.out.println("Inserting tuple into flat table...");
 	   try {
-		   /*In transaction Insertion-Start*/
+		/*In transaction Insertion-Start*/
 		conn.setAutoCommit(false);
 		stmt = conn.createStatement();
 		stmt.execute(stringToInsertTable);
@@ -125,7 +127,7 @@ public class DatabaseConnections {
 	   return inserted;
    }
    /**
-    * Obtain metadata for the flat table
+    * This method is used to obtain metadata for the flat table
     */
    public static Map<String,String> getMetaDataFlatTable(){
 	   Map<String,String> hashMap = new LinkedHashMap<String,String>();
@@ -175,9 +177,9 @@ public class DatabaseConnections {
 	   return hashMap;
    }
    /**
-    * Method to return the count for unique values for the column
+    * This Method is used to return the count for unique values for the column
     * @param columnName
-    * @return
+    * @return count of unique column values
     */
    public static double getUniqueCountForColumn(String columnName){
 	   int uniqueCount = 0;
@@ -222,10 +224,11 @@ public class DatabaseConnections {
 	   return (double)uniqueCount;
    }
    /**
-    * Method to get the modal value for the specific column
+    * This Method is used to obtain unique count for two columns where one column is assumed to have skewed 
+    * towards one value.
     * @param stringValue
     * @param intValue
-    * @return
+    * @return unique count for columns with one column skewed
     */
    public static double getModalValueCount(String columnName,String dependentColumn,String typeOfColumn){
 	   int modalCount = 0;
@@ -287,6 +290,12 @@ public class DatabaseConnections {
 	   }
 	   return (double)totalModalCount;
    }
+   /**
+    * This is the method which gives the unique pair count for the two column parameters
+    * @param column1
+    * @param column2
+    * @return unique pair counts for the columns passed in
+    */
    public static double getUniquePairCount(String column1,String column2){
 	   int uniquePairCount = 0;
 	   String stringForUniqueCount = "SELECT distinct "+column1+","+column2+" FROM FLAT_TABLE";
@@ -330,9 +339,9 @@ public class DatabaseConnections {
 	   return (double)uniquePairCount;
    }
    /**
-    * Method to get the density of the column
+    * This Method is used to obtain the density of the column--> density means unique value count for the column
     * @param columnName
-    * @return
+    * @return count of unique value
     */
    public static double densityOfColumn(String columnName,String typeOfColumn){
 	   int densityCount = 0;
@@ -384,10 +393,11 @@ public class DatabaseConnections {
 	   return (double)densityCount;
    }
    /**
-    * Method to compare 2 user object similarity check
+    * This Method is used to compare two sttribute subtrees for similarity check
+    * User group is one of the attribute subtrees
     * @param userEntity
     * @param mergedByEntity
-    * @return
+    * @return match value for two subtrees which are comparing
     */
 	public static double comparisionOfUserBasedEntities(
 			ArrayList<String> userEntity, ArrayList<String> mergedByEntity) {
@@ -467,8 +477,9 @@ public class DatabaseConnections {
 		return attrMatrixByJoinCount;
 	}
 	/**
-	 * Method to return the attributeMatrix/no.of record count
-	 * Phase 2 step 2 process
+	 * This Method is used to return the attributeMatrix/no.of record count between the attributes
+	 * Which is the step 2 evaluation formula.
+	 * @returns threshold match value for the attributes which is in comparison
 	 */
 	private static double phaseTwoStep2FormulaEvaluation(ResultSet rs,String type,int countColumn){
 		double attrMatrxByRecCount = 0;
@@ -498,10 +509,10 @@ public class DatabaseConnections {
 		return attrMatrxByRecCount;
 	}
 	/**
-	 * Method to comparison of repo objects
+	 * This Method is used to compare repo attribute subtree group
 	 * @param headUserEntity
 	 * @param headUserEntity2
-	 * @return double
+	 * @return match value for two subtrees which are comparing 
 	 */
 	public static double comparisionOfHeadBaseEntities(
 			ArrayList<String> headUserEntity, ArrayList<String> baseUserEntity) {
@@ -591,8 +602,8 @@ public class DatabaseConnections {
 		return attrMatrixByJoinCount;
 	}
 	/**
-	 * Method which gives the count of rows in the table
-	 * @return
+	 * This Method gives the count of rows in the flat table
+	 * @return Number of rows in flat table
 	 */
 	private static double countOfRows(){
 	   double tableRowCount = 0;
@@ -639,9 +650,9 @@ public class DatabaseConnections {
 	   return tableRowCount;
 	}
 	/**
-	 * Creating User table
+	 * This method is used to create User attribute group table
 	 * @param userTable
-	 * @return
+	 * @return flag to indicate whether table was created or not
 	 */
 	public static boolean createUserTable(String userTable){
 		Statement stmt = null;
@@ -665,6 +676,7 @@ public class DatabaseConnections {
 	   System.out.println("Creating user table in given database...");
 	   try {
 		stmt2 = conn.createStatement();
+		//check whether already the table is created or not
 		String userExists = "show tables like \"USERS\"";
 		ResultSet rs = stmt2.executeQuery(userExists);
 		if(!rs.next()){
@@ -687,9 +699,9 @@ public class DatabaseConnections {
 	   return false;
 	}
 	/**
-	 * Inserting into user table
+	 * This method is used to insert values into user table 
 	 * @param insertingUser
-	 * @return
+	 * @return flag to indicate the status of insertion
 	 */
 	public static boolean insertingUserTable(String insertingUser){
 		String selectingUserDetails = "SELECT "+insertingUser;
@@ -763,8 +775,8 @@ public class DatabaseConnections {
 		   return false;
 	}
 	/**
-	 * Method to create label table
-	 * @return
+	 * This Method is used to create label subtree attribute group table
+	 * @return flag to indicate the status of label table creation. 
 	 */
 	public static boolean createLabelTable(String creatingLabelTable){
 		Statement stmt = null;
@@ -788,6 +800,7 @@ public class DatabaseConnections {
 	   System.out.println("Creating label table in given database...");
 	   try {
 		stmt2 = conn.createStatement();
+		//check whether the table already exists or not
 		String userExists = "show tables like \"LABEL\"";
 		ResultSet rs = stmt2.executeQuery(userExists);
 		if(!rs.next()){
@@ -810,9 +823,9 @@ public class DatabaseConnections {
 	   return false;
 	}
 	/**
-	 * Method to create head base tables in database
+	 * This Method is used to create head base attribute group table in database
 	 * @param creatingHeadBaseTable
-	 * @return
+	 * @return flag to indicate the status of creation of head table.
 	 */
 	public static boolean createHeadBaseTable(String creatingHeadBaseTable){
 		Statement stmt = null;
@@ -836,6 +849,7 @@ public class DatabaseConnections {
 	   System.out.println("Creating headBase table in given database...");
 	   try {
 		stmt2 = conn.createStatement();
+		//Check whether the table already exists or not
 		String userExists = "show tables like \"HEAD_BASE_REPO\"";
 		ResultSet rs = stmt2.executeQuery(userExists);
 		if(!rs.next()){
@@ -857,9 +871,9 @@ public class DatabaseConnections {
 	   return false;
 	}
 	/**
-	 * Method to insert label table into the database
+	 * This Method is used to insert values into label table
 	 * @param insertLabelTable
-	 * @return
+	 * @return flag to indicate the status of insertion
 	 */
 	public static boolean insertLabelTable(String insertLabelTable){
 		String[] labelArray = insertLabelTable.split(",");
@@ -921,9 +935,9 @@ public class DatabaseConnections {
 		
 	}
 	/**
-	 * Method to insert tuples to headbase Table into the database
+	 * This Method is used to insert values to headbase Table 
 	 * @param insertHeadBaseTable
-	 * @return
+	 * @return flag to indicate the status of insertion
 	 */
 	public static boolean insertHeadBaseTable(String insertHeadBaseTable){
 		String selectingUserDetails = "SELECT "+insertHeadBaseTable;
@@ -1056,9 +1070,9 @@ public class DatabaseConnections {
 		   return false;
 	}
 	/**
-	 * Method to create milestone table into the db
+	 * This Method is used to create milestone table into the database for milestone attribute group subtree
 	 * @param createMilestoneDatabase
-	 * @return
+	 * @return flag to indicate the status of creation of table.
 	 */
 	public static boolean createMilestoneTable(String createMilestoneDatabase){
 		Statement stmt = null;
@@ -1103,9 +1117,9 @@ public class DatabaseConnections {
 	   return false;
 	}
 	/**
-	 * Method inserting milestone table
+	 * This Method is used to insert data values into the milestone table
 	 * @param insertingMilestoneTable
-	 * @return
+	 * @return flag to indicate the status of insertion into the milestone table
 	 */
 	public static boolean insertIntoMilestoneTable(String insertingMilestoneTable){
 		String selectingUserDetails = "SELECT "+insertingMilestoneTable+" FROM FLAT_TABLE";
@@ -1184,9 +1198,9 @@ public class DatabaseConnections {
 		   return false;
 	}
 	/**
-	 * Method creating link table
+	 * This Method is used to create link table for link attribute sub tree group
 	 * @param creatingLinkTable
-	 * @return
+	 * @return flag to indicate whether table was created or not
 	 */
 	public static boolean createLinkTable(String creatingLinkTable){
 		Statement stmt = null;
@@ -1210,6 +1224,7 @@ public class DatabaseConnections {
 	   System.out.println("Creating link table in given database...");
 	   try {
 		stmt2 = conn.createStatement();
+		//Check whether the table already created or not
 		String userExists = "show tables like \"LINKS\"";
 		ResultSet rs = stmt2.executeQuery(userExists);
 		if(!rs.next()){
@@ -1231,9 +1246,9 @@ public class DatabaseConnections {
 	   return false;
 	}
 	/**
-	 * Method to insert into link table
+	 * This Method is used to insert into link table
 	 * @param insertStatementLink
-	 * @return
+	 * @return flag to indicate whether the data was inserted or not
 	 */
 	public static boolean insertingIntoLinkTable(String insertStatementLink){
 		String selectLinkValuesFromFlatTable = "SELECT "+insertStatementLink+" from flat_table";
@@ -1296,9 +1311,9 @@ public class DatabaseConnections {
 		return false;
 	}
 	/**
-	 * Method creating pullrequest table
+	 * This Method is used to create pullrequest table for the main root attribute group
 	 * @param creatingLinkTable
-	 * @return
+	 * @return flag to indicate whether table was created or not
 	 */
 	public static boolean createPullRequestTable(String createPullRequestTable){
 		Statement stmt = null;
@@ -1322,6 +1337,7 @@ public class DatabaseConnections {
 	   System.out.println("Creating pullrequest table in given database...");
 	   try {
 		stmt2 = conn.createStatement();
+		//check whether the table is already created or not
 		String userExists = "show tables like \"PULL_REQUEST\"";
 		ResultSet rs = stmt2.executeQuery(userExists);
 		if(!rs.next()){
@@ -1344,9 +1360,9 @@ public class DatabaseConnections {
 	   return false;
 	}
 	/**
-	 * Method to insert into link table
+	 * This method to insert values into link table
 	 * @param insertStatementLink
-	 * @return
+	 * @return flag to indicate whether insertion was success or not
 	 */
 	public static boolean insertIntoPullRequestTable(String insertIntoPullRequestTable){
 		String selectLinkValuesFromFlatTable = "SELECT "+insertIntoPullRequestTable+" from flat_table";

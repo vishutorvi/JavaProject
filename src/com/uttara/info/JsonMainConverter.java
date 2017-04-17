@@ -18,7 +18,12 @@ import com.uttara.vo.GithubJsonSchemaVO;
 
 public class JsonMainConverter {
 	/**
-	 * @param args
+	 * Main Method for our project implementation
+	 * We have divided our project into 3 phases
+	 * 	1) Soft Dependency Check between attributes and group them to form attribute tree
+	 *  2) Match Function for comparing attributes within the attribute groups.
+	 *  3) Create Physical Schema for the Input JSON structure.
+	 * 
 	 */
 	public static void main(String[] args) {
 		long startTime = System.currentTimeMillis();
@@ -48,6 +53,10 @@ public class JsonMainConverter {
 			//BufferedReader br = new BufferedReader(new FileReader("G:\\Database_Project\\pull_requestsdb.pull_requests.json"));
 			GithubJsonSchemaVO githubJson;
 			phaseOne.createFlatTable();
+			/**
+			 * Here we insert all the json objects which we get from the dataset
+			 * We connect to database and insert into the flattable.
+			 */
 			while ((strLine = br.readLine()) != null){
 				if(strLine != null){
 					count = count + 1;
@@ -66,6 +75,15 @@ public class JsonMainConverter {
 			}
 			Map<String,String> columnNames = phaseOne.columnInfo();
 			//phaseOne.countFunctionalDependency(columnNames);//time consumer
+			/**
+			 * Step 1: create attribute tree for each of the parent attributes 
+			 * by checking the functional dependencies among all the attributes
+			 * we create a attribute tree, and group the attributes with respect to 
+			 * longest path, Eg: if we have one attribute which satisfies the functional
+			 * dependence condition for root parent attribute and also for subtree 
+			 * parent attribute, then we group this attribute to the subtree parent attribute 
+			 * We used the finalGraphMap as our final Map structure for this step.
+			 */
 			Map<String,LinkedHashSet<String>> finalGraphMap1 = new LinkedHashMap<String,LinkedHashSet<String>>();
 			Map<String,ArrayList<String>> finalObjectStructure = new LinkedHashMap<String,ArrayList<String>>();
 			Map<String,ArrayList<String>> finalGraphMap = new LinkedHashMap<String,ArrayList<String>>();
@@ -77,13 +95,13 @@ public class JsonMainConverter {
 			finalGraphMap1.put("links",new LinkedHashSet<String>());
 			finalGraphMap1.put("milestone", new LinkedHashSet<String>());
 			finalGraphMap1.put("merged_by",new LinkedHashSet<String>());
-			//Dependency Check for RootObject
+			//Functional Dependency Check for RootObject
 			phaseOne.dependencyForRootObjects(finalGraphMap1,columnNames);
-			//Dependency Check for HeadBaseObject
+			//Functional Dependency Check for HeadBaseObject
 			phaseOne.dependencyOnHeadBaseObjects(finalGraphMap1,columnNames);
-			//Dependency Check for MilestoneObject
+			//Functional Dependency Check for MilestoneObject
 			phaseOne.dependencyOnMilestoneLinkObjects(finalGraphMap1,columnNames);
-			//Dependency Check for UserObject
+			//Functional Dependency Check for UserObject
 			phaseOne.dependencyUserTypeObjects(finalGraphMap1,columnNames);
 			//Populate final graph map
 			phaseOne.populateFinalGraphMap(finalGraphMap1, columnNames);
@@ -94,9 +112,19 @@ public class JsonMainConverter {
 			phaseOne.constructingDAGraphFromAttributeDependency(finalGraphMap);
 			phaseOne = null;
 			finalGraphMap1 = null;
-			/*Phase one Code ends*/
+			/*
+			 * Phase one Code ends
+			 */
 			/*Phase two Code starts*/
 			/*All similar User objects*/
+			/**
+			 * Step 2: Once we obtain the attribute tree with attributes groups
+			 * we match the subtrees within this attribute tree in our case we have used
+			 * map which we call as finalGraphMap.
+			 * Using the Match function we check the similar subtrees
+			 * we group the attribute subtrees into one group and this is
+			 * populated into the finalObjectStructure map structure.
+			 */
 			finalObjectStructure.put("labels", new ArrayList<String>());
 			finalObjectStructure.put("repos", new ArrayList<String>());
 			finalObjectStructure.put("users", new ArrayList<String>());
@@ -113,8 +141,16 @@ public class JsonMainConverter {
 			if(finalObjectStructure != null){
 				System.out.println("Finalized similar objects are populated & user object counts are:"+finalObjectStructure.get("users").size());
 			}
-			/*Phase two Code ends*/
-			/*Phase three Code starts*/
+			/*
+			 * Phase two Code ends
+			 */
+			/*
+			 * Phase three Code starts
+			 */
+			/**
+			 * Step 3: We generate the physical schema from the attribute tree
+			 * by creating the grouped attribute subtrees as one table in our schema
+			 */
 			PhaseThreeCode phaseThird = new PhaseThreeCode();
 			phaseThird.creatingAndInsertingTables(finalObjectStructure);
 			/*Phase three Code ends*/

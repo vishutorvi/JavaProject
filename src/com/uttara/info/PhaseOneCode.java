@@ -10,9 +10,9 @@ import com.uttara.vo.GithubJsonSchemaVO;
 
 public class PhaseOneCode {
 	/**
-	 * Method to create the table
+	 * This Method is used to create the flat table
 	 * @param null
-	 * @return creation success or not
+	 * @return flag to indicate table created successfully or not.
 	 */
 	private int totalCountFD = 0;
 	public boolean createFlatTable(){
@@ -347,9 +347,9 @@ public class PhaseOneCode {
 			return true;
 	}
 	/**
-	 * Method to insert values into the tables
+	 * This Method is used to insert values into the flat table
 	 * @param githubJson
-	 * @return insertion success or not
+	 * @return flag to indicate insertion success or not
 	 */
 	public boolean insertValueIntoTable(GithubJsonSchemaVO githubJson) {
 		String returnString= "url,id,html_url,diff_url,patch_url,issue_url,num,state,locked,title";
@@ -448,7 +448,9 @@ public class PhaseOneCode {
 	}
 	
 	/**
-	 * Method to obtain columnInfo
+	 * This Method is used to obtain columnInfo within the flat table
+	 * which is required to match functions and grouping of attribute tree in the step 1
+	 * @return Map object which has column names and column data type
 	 */
 	public Map<String,String> columnInfo(){
 		Map<String,String> columnNames = DatabaseConnections.getMetaDataFlatTable();
@@ -458,7 +460,9 @@ public class PhaseOneCode {
 		return columnNames;
 	}
 	/**
-	 * Method to populate the final GraphMap dependencing on there structure in json
+	 * This Method is used to populate the final GraphMap dependency on there structure in JSON
+	 * @param graphMap and column names and column data type
+	 * @return final map object with attribute groups
 	 */
 	public Map<String,LinkedHashSet<String>> populateFinalGraphMap(Map<String,LinkedHashSet<String>>graphMap,Map<String,String> columnInfo){
 		for(Map.Entry<String, String> entrySet:columnInfo.entrySet()){
@@ -488,7 +492,10 @@ public class PhaseOneCode {
 		return graphMap;
 	}
 	/**
-	 * Method to obtain the outermost objects for now
+	 * This Method is to obtain the functional dependent attributes for one of the 
+	 * subgroup which is the head and base subgroup with its parent attribute
+	 * and populate into the @return graphMap. 
+	 * We kept the threshold as 0.99 similar to what paper does.
 	 */
 	public void dependencyOnHeadBaseObjects(Map<String,LinkedHashSet<String>> graphMap,Map<String,String> columnNames){
 		//First get all the columns from the flat table.
@@ -543,7 +550,10 @@ public class PhaseOneCode {
 		}
 	}
 	/**
-	 * Method to work check dependency on inner objects
+	 * This Method is to obtain the functional dependent attributes for one of the 
+	 * subgroup which is the milestone subgroup with its parent attribute
+	 * and populate into the @return graphMap. 
+	 * We kept the threshold as 0.99 similar to what paper does.
 	 */
 	public void dependencyOnMilestoneLinkObjects(Map<String,LinkedHashSet<String>> graphMap,Map<String,String> columnNames){
 		//First get all the columns from the flat table.
@@ -596,7 +606,10 @@ public class PhaseOneCode {
 		}
 	}
 	/**
-	 * Method to object user objects
+	 * This Method is to obtain the functional dependent attributes for one of the 
+	 * subgroup which is the user subgroup with its parent attribute
+	 * and populate into the @return graphMap. 
+	 * We kept the threshold as 0.99 similar to what paper does.
 	 */
 	public void dependencyUserTypeObjects(Map<String,LinkedHashSet<String>> graphMap,Map<String,String> columnNames){
 		//First get all the columns from the flat table.
@@ -654,7 +667,9 @@ public class PhaseOneCode {
 		}
 	}
 	/**
-	 * Method for root pull request respective attributes
+	 * This Method is to obtain the functional dependent attributes for root parent attribute
+	 * and populate into the @return graphMap
+	 * We kept the threshold as 0.99 similar to what paper does.
 	 */
 	public void dependencyForRootObjects(Map<String,LinkedHashSet<String>> graphMap,Map<String,String> columnNames){
 		//First get all the columns from the flat table.
