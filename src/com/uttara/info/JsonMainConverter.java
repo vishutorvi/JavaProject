@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -27,15 +29,16 @@ public class JsonMainConverter {
 	 */
 	public static void main(String[] args) {
 		long startTime = System.currentTimeMillis();
+		Calendar calendar = Calendar.getInstance();
+		Date startDate = calendar.getTime();
 		JSONParser parser = new JSONParser();
 		try
 		{
 			/**
-			 * First step we will be using only pull request repository which has 7 sub repositories inside it 
+			 * Prephase step we will be using only pull request repository which has 7 sub repositories inside it 
 			 * this below file has only one json structure in it
 			 * we build our logic on top of this and plug in all other data into the database using same logic.
 			 */
-			//I have to code for headVO nearly
 			Object obj3;
 			JSONObject pullrequests;
 			Gson gson = new Gson();
@@ -47,6 +50,7 @@ public class JsonMainConverter {
 			PhaseTwoCode phaseTwo = new PhaseTwoCode();
 			/*Calling Method to create table*/
 			/*If table is created then we need to insert into table or else we dont insert*/
+			//BufferedReader br = new BufferedReader(new FileReader("F:\\pull_requests.json\\prs.json"));
 			//BufferedReader br = new BufferedReader(new FileReader("G:\\Database_Project\\pullrequest\\pullrequest_json_1.json"));
 			BufferedReader br = new BufferedReader(new FileReader("src/pullrequest_json_1.json"));
 			//BufferedReader br = new BufferedReader(new FileReader("G:\\Database_Project\\Dataset\\pull_requestsdb\\pull_requests.json"));
@@ -132,15 +136,30 @@ public class JsonMainConverter {
 			finalObjectStructure.put("pullrequest",finalGraphMap.get("pullrequest"));
 			finalObjectStructure.put("milestone", finalGraphMap.get("milestone"));
 			finalObjectStructure.put("links", finalGraphMap.get("links"));
+			//Completion of phase 1
+			Calendar calendar2 = Calendar.getInstance();
+			// Get start time (this needs to be a global variable).
+			Date endDate = calendar2.getTime();
+			//To print the time
+			printDifference(startDate,endDate,"phase 1:");
+			//Phase 2
+			Calendar calendarPhase2Start = Calendar.getInstance();
+			Date startDatePhase2 = calendarPhase2Start.getTime();
 			//This will populate all the user related similar objects into the map
 			int countPairs = phaseTwo.phaseTwoUserObjectsAlgorithm(finalGraphMap,finalObjectStructure);
 			phaseTwo = new PhaseTwoCode();
 			//This will populate head similar objects into the finalObjectStructure map
 			countPairs += phaseTwo.phaseTwoHeadRepoObjectSimliar(finalGraphMap, finalObjectStructure);
 			System.out.println("Total Correct Paired Attributes are:"+countPairs);
+			//To calculate missing attribute pairs
+			int missingAttributes = phaseTwo.phaseTwoMissingAttributes(finalObjectStructure);
+			System.out.println("Total missing attribute pairs:"+missingAttributes);
 			if(finalObjectStructure != null){
 				System.out.println("Finalized similar objects are populated & user object counts are:"+finalObjectStructure.get("users").size());
 			}
+			Calendar calendarPhase2End = Calendar.getInstance();
+			Date endDatePhase2 = calendarPhase2End.getTime();
+			printDifference(startDatePhase2,endDatePhase2,"phase 2:");
 			/*
 			 * Phase two Code ends
 			 */
@@ -151,12 +170,20 @@ public class JsonMainConverter {
 			 * Step 3: We generate the physical schema from the attribute tree
 			 * by creating the grouped attribute subtrees as one table in our schema
 			 */
+			Calendar calendarPhase3Start = Calendar.getInstance();
+			Date startDatePhase3 = calendarPhase3Start.getTime();
 			PhaseThreeCode phaseThird = new PhaseThreeCode();
 			phaseThird.creatingAndInsertingTables(finalObjectStructure);
+			
+			Calendar calendarPhase3end = Calendar.getInstance();
+			Date endDatePhase3 = calendarPhase3end.getTime();
+			printDifference(startDatePhase3, endDatePhase3, "phase 3:");
+			//overall system time
+			printDifference(startDate, endDatePhase3, "Overall System:");
 			/*Phase three Code ends*/
 			long stopTime = System.currentTimeMillis();
 		    long elapsedTime = stopTime - startTime;
-		    System.out.println("Time taken to complete the system execution: "+elapsedTime);
+		   // System.out.println("Time taken to complete the system execution: "+elapsedTime);
 		} catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -164,5 +191,42 @@ public class JsonMainConverter {
         } catch (ParseException e) {
 			e.printStackTrace();
 		}
+	}
+	/**
+	 * Method to evaluate the execution time of this project
+	 * @param startDate
+	 * @param endDate
+	 * @param phases
+	 */
+	public static void printDifference(Date startDate, Date endDate,String phases){
+
+		//milliseconds
+		long different = endDate.getTime() - startDate.getTime();
+
+		System.out.println("startDate : " + startDate);
+		System.out.println("endDate : "+ endDate);
+		System.out.println("different : " + different);
+
+		long secondsInMilli = 1000;
+		long minutesInMilli = secondsInMilli * 60;
+		long hoursInMilli = minutesInMilli * 60;
+		long daysInMilli = hoursInMilli * 24;
+
+		long elapsedDays = different / daysInMilli;
+		different = different % daysInMilli;
+
+		long elapsedHours = different / hoursInMilli;
+		different = different % hoursInMilli;
+
+		long elapsedMinutes = different / minutesInMilli;
+		different = different % minutesInMilli;
+
+		long elapsedSeconds = different / secondsInMilli;
+
+		System.out.printf(phases+" execution time:"+
+		    "%d days, %d hours, %d minutes, %d seconds%n",
+		    elapsedDays,
+		    elapsedHours, elapsedMinutes, elapsedSeconds);
+
 	}
 }

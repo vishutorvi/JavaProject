@@ -10,6 +10,7 @@ public class PhaseTwoCode {
 	//Since the error also squares up we use the threshold for match as 0.9 * 0.9
 	private final double threshold = (0.99 * 0.99);
 	public int countPairs = 0;
+	public static final String DELIMITER = "__";
 	/**
 	 * This Method is used to compare the user objects within the all the sub attribute groups
 	 * using the match function which we define in the databaseconnections class.
@@ -268,5 +269,36 @@ public class PhaseTwoCode {
 			System.out.println("headBase correct attribute pairs are:"+countPairs);
 		}
 		return countPairs;
+	}
+	/**
+	 * This method is used to provide the number of Missing attribute from the subtrees
+	 * which we added in the root pullrequest attribute group
+	 * @param finalObjectStructure
+	 * @return count of miss attributes
+	 */
+	public int phaseTwoMissingAttributes(
+			Map<String, ArrayList<String>> finalObjectStructure) {
+		int missingAttributePair = 0;
+		if(finalObjectStructure != null){
+			ArrayList<String> pullRequestAttributeGroup = finalObjectStructure.get("pullrequest");
+			if(pullRequestAttributeGroup != null){
+				for(String attribute:pullRequestAttributeGroup){
+					if(attribute.contains(DELIMITER)){
+						missingAttributePair = missingAttributePair + 1;
+					}
+				}
+			}
+			pullRequestAttributeGroup = finalObjectStructure.get("repos");
+			if(pullRequestAttributeGroup != null){
+				String attributeMapContent = pullRequestAttributeGroup.get(0);
+				String[] attributes = attributeMapContent.split(","); 
+				for(String attribute:attributes){
+					if(attribute.contains("repo")){
+						missingAttributePair = missingAttributePair + 1;
+					}
+				}
+			}
+		}
+		return missingAttributePair;
 	}
 }
