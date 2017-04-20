@@ -28,7 +28,6 @@ public class JsonMainConverter {
 	 * 
 	 */
 	public static void main(String[] args) {
-		long startTime = System.currentTimeMillis();
 		Calendar calendar = Calendar.getInstance();
 		Date startDate = calendar.getTime();
 		JSONParser parser = new JSONParser();
@@ -154,9 +153,12 @@ public class JsonMainConverter {
 			//To calculate missing attribute pairs
 			int missingAttributes = phaseTwo.phaseTwoMissingAttributes(finalObjectStructure);
 			System.out.println("Total missing attribute pairs:"+missingAttributes);
+			System.out.println("Total Matching Entities:"+phaseTwo.matchingEntityCount(finalObjectStructure));
 			if(finalObjectStructure != null){
 				System.out.println("Finalized similar objects are populated & user object counts are:"+finalObjectStructure.get("users").size());
 			}
+			//Method to check the matching entities
+			phaseTwo.matchingEntityCount(finalObjectStructure);
 			Calendar calendarPhase2End = Calendar.getInstance();
 			Date endDatePhase2 = calendarPhase2End.getTime();
 			printDifference(startDatePhase2,endDatePhase2,"phase 2:");
@@ -181,9 +183,6 @@ public class JsonMainConverter {
 			//overall system time
 			printDifference(startDate, endDatePhase3, "Overall System:");
 			/*Phase three Code ends*/
-			long stopTime = System.currentTimeMillis();
-		    long elapsedTime = stopTime - startTime;
-		   // System.out.println("Time taken to complete the system execution: "+elapsedTime);
 		} catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

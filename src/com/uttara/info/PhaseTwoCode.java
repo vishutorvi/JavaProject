@@ -301,4 +301,78 @@ public class PhaseTwoCode {
 		}
 		return missingAttributePair;
 	}
+	
+	/**
+	 * This method is used to obtain the count for the matching entities within the dataset
+	 */
+	public int matchingEntityCount(Map<String, ArrayList<String>> finalObjectStructure){
+		int countMatchingEntity = 0;
+		int userOuterEntities = 0;
+		int userInnerEntities = 0;
+		int linkEntities = 0;
+		int labelEntities = 0;
+		int reposEntites = 0;
+		ArrayList<String> matchingEntities;
+		for(Map.Entry<String, ArrayList<String>> matchingObject:finalObjectStructure.entrySet()){
+			if(matchingObject.getKey().contains("users")){
+				matchingEntities = matchingObject.getValue();
+				for(int i=0;i<matchingEntities.size();i++){
+					String userObject = matchingEntities.get(i).split(",")[0];
+					if(userObject.contains("__")){
+						userInnerEntities = userInnerEntities + 1;
+					}else{
+						userOuterEntities = userOuterEntities + 1;
+					}
+					
+				}
+			}
+			if(matchingObject.getKey().contains("links")){
+				matchingEntities = matchingObject.getValue();
+				for(int i=0;i<matchingEntities.size();i++){
+					String userObject = matchingEntities.get(i).split(",")[0];
+					if(userObject.contains("__")){
+						linkEntities = linkEntities + 1;
+					}else{
+						linkEntities = linkEntities + 1;
+					}
+				}
+			}
+			if(matchingObject.getKey().contains("labels")){
+				matchingEntities = matchingObject.getValue();
+				for(int i=0;i<matchingEntities.size();i++){
+					String userObject = matchingEntities.get(i).split(",")[0];
+					if(userObject.contains("__")){
+						labelEntities = labelEntities + 1;
+					}else{
+						labelEntities = labelEntities + 1;
+					}
+				}
+			}
+			if(matchingObject.getKey().contains("repos")){
+				matchingEntities = matchingObject.getValue();
+				for(int i=0;i<matchingEntities.size();i++){
+					String userObject = matchingEntities.get(i).split(",")[0];
+					if(userObject.contains("__")){
+						reposEntites = reposEntites + 1;
+					}else{
+						reposEntites = reposEntites + 1;
+					}
+				}
+			}
+		}
+		if(userOuterEntities+userInnerEntities > 7){
+			countMatchingEntity += 18;
+		}
+		if(reposEntites >= 2){
+			countMatchingEntity += 2;
+		}
+		if(labelEntities >= 2){
+			countMatchingEntity += 1;
+		}
+		if(linkEntities >= 2){
+			countMatchingEntity += 3;
+		}
+		System.out.println("Total Matching Entities count="+countMatchingEntity);
+		return countMatchingEntity;
+	}
 }
