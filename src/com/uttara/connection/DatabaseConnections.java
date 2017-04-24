@@ -17,7 +17,7 @@ public class DatabaseConnections {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-	static final String DB_URL = "jdbc:mysql://localhost:3306/sampletable_demo3";
+	static String DB_URL = "jdbc:mysql://localhost:3306";
 
    //  Database credentials
    	static final String USER = "root";
@@ -26,7 +26,31 @@ public class DatabaseConnections {
 	private static final String BIGINT = "BIGINT";
 	private static final String VARCHAR = "VARCHAR";
 	// total row count
-	private static double countRow = countOfRows();
+	private static double countRow;
+	
+	/**
+	 * This method will create a schema if its not created before
+	 */
+	public static void createSchema(){
+	    Connection con = null;
+	    try {
+    	  //STEP 2: Register JDBC driver
+	      Class.forName("com.mysql.jdbc.Driver");
+	      //STEP 3: Open a connection
+	      System.out.println("Connecting to a selected database...");
+	      con = DriverManager.getConnection(DB_URL, USER, PASS);
+	      // Creating a database schema
+	      Statement sta = con.createStatement(); 
+	      sta.executeUpdate("CREATE SCHEMA sampletable3");
+	      System.out.println("Schema created.");
+	      DB_URL += "/sampletable3";
+	      sta.close();        
+	      con.close();        
+	    } catch (Exception e) {
+	      e.printStackTrace();
+	    }
+			  
+	}
    /**
     * This Method is used to create flat table
     * @param stringToCreateTable
@@ -43,6 +67,12 @@ public class DatabaseConnections {
 		      //STEP 3: Open a connection
 		      System.out.println("Connecting to a selected database...");
 		      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+		      String databaseSchema = "show databases like \"sampletable3\"";
+		      Statement stmtSchema = conn.createStatement();
+		      ResultSet rsSchema = stmtSchema.executeQuery(databaseSchema);
+		      if(!rsSchema.next()){
+		    	  createSchema();
+		      }
 		   }catch(SQLException se){
 		      //Handle errors for JDBC
 		      se.printStackTrace();
@@ -53,6 +83,7 @@ public class DatabaseConnections {
 	   }
 	   System.out.println("Creating flat table in given database...");
 	   try {
+		conn = DriverManager.getConnection(DB_URL, USER, PASS);
 		stmt = conn.createStatement();
 		//Check whether table were already created or not
 		String userExists = "show tables like \"FLAT_TABLE\"";
@@ -110,6 +141,7 @@ public class DatabaseConnections {
 		stmt.execute(stringToInsertTable);
 	    System.out.println("Inserted tuple into table...");
 	    conn.setAutoCommit(true);
+	    countRow = countOfRows();
 	    /*In transaction Insertion-End*/
 	    return inserted;
 	   }catch (SQLException e) {
