@@ -33,4 +33,4 @@ To obtain Schema for this database, We need to do reverse engineering
     1) Go to MySQL WORKBENCH
     2) Select Database from menu bar.
     3) Click on Reverse Engineer
-    4) Select the Database for which Schema needs to be generated. In my case it is (sampletable_demo).
+    4) Select the Database for which Schema needs to be generated. In my case it is (sampletable3).
