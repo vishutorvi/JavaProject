@@ -16,12 +16,12 @@ To install and run this Project following steps should be followed:
 
 4) Since default user,password for mySQL connections are root, root. We have considered this value for our mySQL connection.
 
-5) If your mySQL connection has different user, password. You need to either change in one place, if you want to tweek our code, DatabaseConnections.java is the file name. we have defined two constants at the beginning for user name and password.
+5) If your mySQL connection has different user, password. You need to either change in one place, if you want to tweek our code, DatabaseConnections.java is the file name. we have defined two constants at the beginning for user name and password(check line number 23,24).
 
 6) Download the complete package/you can directly use the Zip file, we have sample JSON file within the folder /src, this is a sample of 100 JSON Objects which is enough to test this project If complete dataset is required please follow the link:
 https://drive.google.com/file/d/0B3Mo6HBxuETXY2phSkdaeFJhZVU/view?usp=sharing
 
-7) To use the above complete dataset, Please place this file under /src. Once it is placed, change the file by name JsonMainConverter.java under '/src/com/uttara/info' folder. Change line No 46, source from 'src/pullrequest_json_1.json' to 'src/pullrequestsdb.pull_requests.json'
+7) To use the above complete dataset, Please place this file under /src. Once it is placed, change the file by name JsonMainConverter.java under '/src/com/uttara/info' folder. Change line No 54, source from 'src/pullrequest_json_1.json' to 'src/pullrequestsdb.pull_requests.json'
 
 8) We can use either Eclipse or Netbeans IDE to load this workspace folders, and go to the file JsonMainConverter.java, right click and run as Java Application.
 
