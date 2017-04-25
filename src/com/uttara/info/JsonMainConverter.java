@@ -49,11 +49,9 @@ public class JsonMainConverter {
 			PhaseTwoCode phaseTwo = new PhaseTwoCode();
 			/*Calling Method to create table*/
 			/*If table is created then we need to insert into table or else we dont insert*/
-			//BufferedReader br = new BufferedReader(new FileReader("F:\\pull_requests.json\\prs.json"));
-			//BufferedReader br = new BufferedReader(new FileReader("G:\\Database_Project\\pullrequest\\pullrequest_json_1.json"));
+			//BufferedReader br = new BufferedReader(new FileReader("src/prs.json"));
+			//BufferedReader br = new BufferedReader(new FileReader("src/pull_requestsdb.pull_requests.json"));
 			BufferedReader br = new BufferedReader(new FileReader("src/pullrequest_json_1.json"));
-			//BufferedReader br = new BufferedReader(new FileReader("G:\\Database_Project\\Dataset\\pull_requestsdb\\pull_requests.json"));
-			//BufferedReader br = new BufferedReader(new FileReader("G:\\Database_Project\\pull_requestsdb.pull_requests.json"));
 			GithubJsonSchemaVO githubJson;
 			phaseOne.createFlatTable();
 			/**
